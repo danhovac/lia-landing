@@ -1,0 +1,123 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css');
+
+@layer base {
+  :root {
+    --background: 0 0% 97.6%; /* #F9F9F9 */
+    --foreground: 200 7% 11%; /* #1C1C1E */
+    --card: 0 0% 100%;
+    --card-foreground: 200 7% 11%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 200 7% 11%;
+    --primary: 0 65% 77%; /* #F6C1C1 */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 210 4% 98%;
+    --secondary-foreground: 200 7% 11%;
+    --muted: 210 4% 96%;
+    --muted-foreground: 215 4% 46%;
+    --accent: 210 4% 96%;
+    --accent-foreground: 200 7% 11%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 214 6% 91%;
+    --input: 214 6% 91%;
+    --ring: 0 65% 77%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 200 7% 11%;
+    --foreground: 0 0% 98%;
+    --card: 200 7% 13%;
+    --card-foreground: 0 0% 98%;
+    --popover: 200 7% 13%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 65% 77%;
+    --primary-foreground: 200 7% 11%;
+    --secondary: 200 7% 18%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 200 7% 18%;
+    --muted-foreground: 200 4% 60%;
+    --accent: 200 7% 18%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62% 48%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 200 7% 18%;
+    --input: 200 7% 18%;
+    --ring: 0 65% 77%;
+  }
+}
+
+@layer base {
+  * {
+    border-color: hsl(var(--border));
+  }
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+  }
+  html {
+    @apply scroll-smooth;
+  }
+  
+  body {
+    @apply bg-[#F9F9F9] text-[#1C1C1E] antialiased;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold tracking-tight;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-primary-500 text-white px-8 py-4 rounded-full font-medium 
+           hover:bg-primary-600 transition-all duration-300 
+           transform hover:scale-105 shadow-lg hover:shadow-xl
+           active:scale-100;
+  }
+  
+  .btn-secondary {
+    @apply bg-white text-primary-600 px-8 py-4 rounded-full font-medium 
+           border-2 border-primary-500 hover:bg-primary-50 
+           transition-all duration-300 transform hover:scale-105
+           active:scale-100;
+  }
+  
+  .section-padding {
+    @apply px-6 py-16 md:py-20 lg:py-24;
+  }
+  
+  .container-width {
+    @apply max-w-7xl mx-auto;
+  }
+  
+  .card-shadow {
+    @apply shadow-xl hover:shadow-2xl transition-shadow duration-300;
+  }
+  
+  .gradient-pink {
+    @apply bg-gradient-to-br from-primary-300 to-primary-500;
+  }
+  
+  .gradient-trust {
+    @apply bg-gradient-to-br from-trust-light to-trust;
+  }
+  
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary-500 to-primary-700;
+  }
+}
+
+@layer utilities {
+  .animate-in {
+    animation: fadeUp 0.5s ease-out;
+  }
+  
+  .backdrop-blur-xl {
+    backdrop-filter: blur(20px);
+  }
+}

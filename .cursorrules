@@ -1,0 +1,217 @@
+# Cursor Rules for LIA Landing Page Project
+
+## Project Context
+This is a Next.js 15.5.2 landing page for LIA (Life-stage Intelligence Assistant), an AI healthcare platform for menopausal women. The project uses TypeScript, Tailwind CSS 3.4.17, and ShadCN/UI components.
+
+## Critical Rules to Prevent Errors
+
+### 1. NEVER Use Tailwind CSS v4 Syntax
+❌ **WRONG:**
+```css
+@theme {
+  --color-primary: #F6C1C1;
+}
+```
+
+✅ **CORRECT:**
+```css
+/* Use Tailwind v3 configuration in tailwind.config.ts */
+```
+
+### 2. ShadCN/UI CSS Variables Setup
+When integrating ShadCN/UI, NEVER use @apply with undefined classes.
+
+❌ **WRONG:**
+```css
+@layer base {
+  * {
+    @apply border-border; /* This class doesn't exist */
+  }
+  body {
+    @apply bg-background text-foreground; /* These don't exist yet */
+  }
+}
+```
+
+✅ **CORRECT:**
+```css
+@layer base {
+  * {
+    border-color: hsl(var(--border));
+  }
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+  }
+}
+```
+
+### 3. Always Install Required Dependencies
+When using ShadCN components, ensure ALL dependencies are installed:
+
+```bash
+# Required for ShadCN/UI
+npm install lucide-react  # Icons used by ShadCN components
+npm install clsx tailwind-merge  # Utility functions
+npm install @radix-ui/react-slot  # Core Radix UI
+npm install class-variance-authority  # Component variants
+```
+
+### 4. Tailwind Configuration for ShadCN
+Always include CSS variable colors in tailwind.config.ts:
+
+```typescript
+colors: {
+  // ShadCN CSS Variables - MUST BE INCLUDED
+  border: "hsl(var(--border))",
+  input: "hsl(var(--input))",
+  ring: "hsl(var(--ring))",
+  background: "hsl(var(--background))",
+  foreground: "hsl(var(--foreground))",
+  // ... other ShadCN variables
+  
+  // Project-specific colors
+  primary: {
+    // Include both static values AND CSS variable
+    500: '#F6C1C1',
+    DEFAULT: "hsl(var(--primary))",
+    foreground: "hsl(var(--primary-foreground))",
+  }
+}
+```
+
+### 5. File Reading Requirements
+ALWAYS read a file before editing it:
+
+❌ **WRONG:**
+```typescript
+// Attempting to edit without reading first
+Edit("/path/to/file", ...)  // Will fail
+```
+
+✅ **CORRECT:**
+```typescript
+// Read first, then edit
+Read("/path/to/file")
+Edit("/path/to/file", ...)
+```
+
+### 6. PostCSS Configuration
+For Tailwind CSS v3, use simple object format:
+
+❌ **WRONG (v4 syntax):**
+```javascript
+plugins: [
+  '@tailwindcss/postcss',
+]
+```
+
+✅ **CORRECT (v3 syntax):**
+```javascript
+plugins: {
+  tailwindcss: {},
+  autoprefixer: {},
+}
+```
+
+### 7. Korean Content Handling
+- Maintain Korean language throughout user-facing content
+- Use Pretendard font for Korean typography
+- Keep medical disclaimers in Korean
+
+### 8. Component Structure
+```
+components/
+├── ui/                 # ShadCN components only
+│   ├── button.tsx
+│   ├── card.tsx
+│   └── form.tsx
+└── sections/          # Page sections
+    ├── Hero.tsx
+    └── FinalCTA.tsx
+```
+
+### 9. Path Requirements
+- Always use absolute paths in Read/Write operations
+- Never use relative paths like "./file"
+- Example: `/Users/yejilee/cc-playground/landingpage/lialaning/...`
+
+### 10. Design System Rules
+- **Current Balance**: 60% Vercel modern style + 40% warm healthcare mood
+- **No emojis in benefits/features** - Use SVG icons instead
+- **Emojis allowed only in testimonials** - Use appropriate women emojis (👩, 👩‍🦰, 👩‍🦳)
+- **Primary color**: #F6C1C1 (Soft Warm Pink)
+- **Background**: #F9F9F9 (White Smoke)
+- **Text**: #1C1C1E (Deep Charcoal)
+
+## Common Error Patterns to Avoid
+
+### Error 1: Module Not Found
+**Cause**: Missing dependencies
+**Prevention**: Always check and install required packages before using components
+
+### Error 2: Tailwind Class Not Found
+**Cause**: Using undefined Tailwind classes or CSS variables
+**Prevention**: 
+- Define all CSS variables in :root
+- Add corresponding colors to tailwind.config.ts
+- Use direct CSS properties instead of @apply for CSS variables
+
+### Error 3: Hydration Mismatch
+**Cause**: Client/Server rendering differences
+**Prevention**: Add `suppressHydrationWarning` to body tag when needed
+
+### Error 4: Build Failures
+**Cause**: Incorrect CSS syntax or missing dependencies
+**Prevention**: 
+- Test with `npm run dev` before `npm run build`
+- Check for undefined Tailwind classes
+- Ensure all imports are correct
+
+## Testing Checklist
+Before committing changes:
+- [ ] Run `npm run dev` and check for errors
+- [ ] Run `npm run build` to ensure production build works
+- [ ] Test all navigation links
+- [ ] Verify form validation works
+- [ ] Check responsive design on mobile/tablet/desktop
+- [ ] Ensure all styles are applied correctly
+
+## Dependencies Version Lock
+```json
+{
+  "next": "15.5.2",
+  "react": "19.1.0",
+  "tailwindcss": "^3.4.17",  // NOT v4
+  "typescript": "^5",
+  "@radix-ui/*": "latest",
+  "lucide-react": "latest"
+}
+```
+
+## File Modification Rules
+1. Always read files before editing
+2. Use MultiEdit for multiple changes to same file
+3. Never create files unless absolutely necessary
+4. Prefer editing existing files over creating new ones
+
+## Import Patterns
+```typescript
+// ShadCN UI components
+import { Button } from "@/components/ui/button"
+
+// Custom components
+import Hero from "@/components/sections/Hero"
+
+// Utilities
+import { cn } from "@/lib/utils"
+```
+
+## CSS Organization
+1. CSS variables in :root
+2. Tailwind directives at top
+3. Custom classes in @layer directives
+4. No mixing of v3 and v4 syntax
+
+---
+**Remember**: Always verify Tailwind CSS version (v3, not v4) and ensure all dependencies are installed before using any component or feature.
