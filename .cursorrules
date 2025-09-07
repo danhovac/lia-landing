@@ -213,5 +213,147 @@ import { cn } from "@/lib/utils"
 3. Custom classes in @layer directives
 4. No mixing of v3 and v4 syntax
 
+## 🏗️ ARCHITECTURE MAINTENANCE RULES
+
+### Architecture Documentation
+**CRITICAL**: The project architecture is documented in `/docs/ARCHITECTURE.md` (Version 1.0.0)
+
+### When Making Changes:
+
+#### 1. BEFORE Any Code Changes:
+- **READ** `/docs/ARCHITECTURE.md` first
+- **CHECK** if changes align with current architecture
+- **VERIFY** component locations match architecture
+
+#### 2. Component Creation Rules:
+```typescript
+// New components MUST follow this structure:
+// 1. Place in correct directory per architecture
+// 2. Follow naming conventions
+// 3. Update ARCHITECTURE.md
+
+// Section Components → components/sections/
+// UI Components → components/ui/
+// Hooks → hooks/
+// Services → services/
+// Types → types/
+// Utilities → lib/
+```
+
+#### 3. Architecture Change Protocol:
+If architecture changes are needed:
+
+```markdown
+1. UPDATE docs/ARCHITECTURE.md with:
+   - New version number (follow SemVer)
+   - Change description in Version History
+   - Updated diagrams/structure
+   
+2. CREATE architecture change log entry:
+   ## Version X.X.X (YYYY-MM-DD)
+   ### Changes:
+   - What changed
+   - Why it changed
+   - Impact on existing code
+   
+3. MAINTAIN backward compatibility when possible
+```
+
+#### 4. Version Numbering Rules:
+- **Major (X.0.0)**: Breaking changes, structural refactors
+- **Minor (x.X.0)**: New features, components, services
+- **Patch (x.x.X)**: Bug fixes, style updates
+
+#### 5. Component Checklist:
+When creating/modifying components:
+- [ ] Follows directory structure in ARCHITECTURE.md
+- [ ] Uses consistent naming convention
+- [ ] Includes proper TypeScript types
+- [ ] Updates ARCHITECTURE.md if new pattern
+- [ ] Maintains existing design patterns
+
+#### 6. State Management Rules:
+- **Current**: Local state only (useState)
+- **Future (v2.0.0)**: Context API/Zustand
+- DO NOT introduce global state without architecture update
+
+#### 7. External Service Integration:
+Current services:
+- Tally (forms)
+- n8n (automation)
+- Brevo (email)
+
+Adding new services requires:
+1. Architecture version bump
+2. Document in services section
+3. Update data flow diagram
+
+#### 8. File Organization Standards:
+```
+✅ CORRECT:
+components/sections/NewSection.tsx
+hooks/use-new-feature.ts
+lib/new-utility.ts
+
+❌ WRONG:
+components/NewSection.tsx (missing subfolder)
+utils/helper.ts (wrong folder name)
+NewComponent.jsx (wrong extension)
+```
+
+#### 9. Import Order Convention:
+```typescript
+// 1. React/Next imports
+import { useState } from 'react'
+import Image from 'next/image'
+
+// 2. External libraries
+import { cn } from 'clsx'
+
+// 3. Internal components
+import { Button } from '@/components/ui/button'
+
+// 4. Internal utilities
+import { formatDate } from '@/lib/utils'
+
+// 5. Types
+import type { User } from '@/types'
+
+// 6. Styles
+import styles from './component.module.css'
+```
+
+#### 10. Documentation Requirements:
+Every architectural change MUST include:
+- Version number update
+- Change rationale
+- Migration guide (if breaking)
+- Updated examples
+
+### Architecture Review Triggers:
+Automatically review architecture when:
+- Adding new top-level directories
+- Introducing new state management
+- Adding external services
+- Changing data flow patterns
+- Modifying build configuration
+
+### Architecture Audit Command:
+Before major commits, verify:
+```bash
+# Check if all components follow structure
+find components -type f -name "*.tsx" | grep -v -E "sections/|ui/"
+
+# Check for unauthorized directories
+ls -la | grep -v -E "app|components|docs|hooks|lib|public|node_modules"
+
+# Verify no .jsx files (should be .tsx)
+find . -name "*.jsx" -o -name "*.js" | grep -v node_modules
+```
+
 ---
-**Remember**: Always verify Tailwind CSS version (v3, not v4) and ensure all dependencies are installed before using any component or feature.
+**Remember**: 
+1. Always verify Tailwind CSS version (v3, not v4)
+2. Read ARCHITECTURE.md before structural changes
+3. Update architecture version for any structural modifications
+4. Maintain consistency with established patterns
